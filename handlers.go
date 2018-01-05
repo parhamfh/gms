@@ -1,6 +1,7 @@
 package main
 
 import (
+	"database/sql"
 	"encoding/json"
 	"fmt"
 	"html"
@@ -39,7 +40,7 @@ func TracksIndex(w http.ResponseWriter, r *http.Request) {
 	}
 	err = rows.Err()
 	if err != nil {
-		log.Fatal(err)
+		log.Fatal("TracksIndex: ", err)
 	}
 
 	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
@@ -53,5 +54,22 @@ func TracksIndex(w http.ResponseWriter, r *http.Request) {
 func TracksShow(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	trackId := vars["trackId"]
-	fmt.Fprintln(w, "TracksShow request", trackId)
+
+	var id int
+	var title, artist string
+	var releaseDate time.Time
+
+	err := db_con.QueryRow("SELECT * FROM tracks WHERE id = $1", trackId).Scan(&id, &title, &artist, &releaseDate)
+	if err != nil {
+		log.Println("TracksShow: ", err)
+		if err == sql.ErrNoRows {
+			w.WriteHeader(404)
+			return
+		}
+		log.Fatal("TracksShow: Unexpected error.")
+	}
+	track := Track{id, title, artist, releaseDate}
+	if err := json.NewEncoder(w).Encode(track); err != nil {
+		panic(err)
+	}
 }
