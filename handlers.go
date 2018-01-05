@@ -10,6 +10,7 @@ import (
 	"time"
 
 	"github.com/gorilla/mux"
+	"github.com/lib/pq"
 )
 
 func Index(w http.ResponseWriter, r *http.Request) {
@@ -65,6 +66,17 @@ func TracksShow(w http.ResponseWriter, r *http.Request) {
 		if err == sql.ErrNoRows {
 			w.WriteHeader(404)
 			return
+		}
+		// is it a PostgreSQL error?
+		if err, ok := err.(*pq.Error); ok {
+			// Why doesn't this print like a struct?
+			// fmt.Printf("%T: %+v\n\n", test, test)
+			fmt.Printf("%#v\n", err)
+
+			if err.Code == "22P02" {
+				w.WriteHeader(400)
+				return
+			}
 		}
 		log.Fatal("TracksShow: Unexpected error.")
 	}
