@@ -24,7 +24,7 @@ func TracksIndex(w http.ResponseWriter, r *http.Request) {
 	defer rows.Close()
 
 	// Empty array
-    tracks := make([]Track, 0)
+	tracks := make([]Track, 0)
 
 	var id int
 	var title, artist string
