@@ -1,11 +1,11 @@
 package main
 
 import (
-	"log"
-	"net/http"
+    "log"
+    "net/http"
 )
-
 func main() {
-	router := NewRouter()
-	log.Print(http.ListenAndServe(":8080", router))
+    ConnectDB()
+    router := NewRouter()
+    log.Print(http.ListenAndServe(":8080", router))
 }
