@@ -37,6 +37,10 @@ func TracksIndex(w http.ResponseWriter, r *http.Request) {
 
 		tracks = append(tracks, Track{Id: id, Title: title, Artist: artist, ReleaseDate: releaseDate})
 	}
+	err = rows.Err()
+	if err != nil {
+		log.Fatal(err)
+	}
 
 	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
 	w.WriteHeader(200)
