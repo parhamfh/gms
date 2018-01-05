@@ -3,9 +3,9 @@ package main
 import "time"
 
 type Track struct {
-	Name      string    `json:"name"`
-	Completed bool      `json:"completed"`
-	Due       time.Time `json:"due"`
+	Title           string      `json:"title"`
+	Artist          string      `json:"artist"`
+	ReleaseDate     time.Time   `json:"releaseDate"`
 }
 
 type Tracks []Track

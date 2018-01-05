@@ -18,12 +18,12 @@ func TracksIndex(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("Tracks request")
 
 	tracks := Tracks{
-		Track{Name: "Sonic Blast!"},
-		Track{Name: "Pure Love"},
+        Track{Title: "Sonic Blast!", Artist: "Arcane Fist"},
+        Track{Title: "Pure Love", Artist: "Juju Box"},
 	}
 
     w.Header().Set("Content-Type", "application/json; charset=UTF-8")
-    w.WriteHeader(201)
+    w.WriteHeader(200)
 
     if err := json.NewEncoder(w).Encode(tracks); err != nil {
         panic(err)
